@@ -1,4 +1,4 @@
-package uestc.test;
+package test
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
