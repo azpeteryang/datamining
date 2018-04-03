@@ -1,0 +1,46 @@
+package datapreprocessing
+import weka.core.Instance;
+import weka.core.convertors.converterUtils.DataSink;
+import weka.core.convertors.converterUtils.DataSource;
+public class MV{
+  public static void main(String[] args) throws Exception{
+    System.out.println("step 1:read data");
+    string fn="D:/weka-3-7-7/data/a.arff";
+    DataSource source = new DataSource(fn);
+    Instances instances=source.getDataSet();
+    int dim = instances.numAttributes();
+    int num = instances.numInstances();
+    System.out.println("step2:MVpreprocessing");
+    //caulate the mean value of all data
+    double[] meanV = new double[dim];
+    for(int i=0;i<dim;i++)
+    {
+      meanV[i] = 0;
+      int cnt = 0;
+      for (int j=0;j<num;j++)
+      {
+        if(!instances.instance(j).isM(i))
+        {
+          meanV[i] +=instances.instance(j).value(i);
+          cnt++;
+         }
+       }
+       meanV[i]=meanV[i]/cnt;
+     }
+     for(int i=0;i<dim;i++)
+     {
+        for(int j=0;j<dim;j++)
+          {
+            if (instances.instance(j).isMissing(i))
+            {
+              instances.instance(j).setvalue(i,meanV[i]);
+            }
+          }
+     }
+     }     
+    }
+    System.out.println("step3: save files")
+    DataSink.write(fn.substring(0,fn.length()-6)+"_handle.arff",instances);
+    System.out.println("Finish preprocessing.")
+  }
+}
