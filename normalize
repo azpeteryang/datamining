@@ -1,0 +1,49 @@
+package uestc.test;
+import weka.core.Attribute;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSink;
+import weka.core.converters.ConverterUtils.DataSource;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Normalize; 
+
+
+public class test {
+
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("Step 1. read data");
+		DataSource source = new DataSource("D:/Program Files/Weka-3-9/data/iris.arff");  
+		Instances instances = source.getDataSet();
+		System.out.println("Step 2. normalize data");
+		Normalize norm = new Normalize();
+		norm.setInputFormat(instances);
+		Instances newInstances = Filter.useFilter(instances, norm);
+		System.out.println("step 3. print after normalize");
+		System.out.println("-----------------");
+		try{
+			int numOfAttribute = newInstances.numAttributes();  
+			for(int i = 0; i < numOfAttribute; ++i)  
+			{  
+				Attribute attribute = newInstances.attribute(i);
+				System.out.println(attribute.name() + "    ");
+			}
+			System.out.println();
+			
+			int numOfInstance = newInstances.numInstances();  
+			for(int i = 0; i < numOfInstance; ++i)  
+			{  
+			    Instance instance = newInstances.instance(i);  
+			    System.out.print(instance.toString() + "     ");  
+			    System.out.println();  
+			}
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		System.out.println("step 4 .save");
+		DataSink.write("D:/Program Files/Weka-3-9/data/iris_normal.arff", newInstances);
+	}
+
+}
